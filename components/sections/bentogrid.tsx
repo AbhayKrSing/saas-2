@@ -1,137 +1,144 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
-// ServiceBox component that displays the individual service details in a modal
-interface ServiceBoxProps {
-  title: string;
-  shortDescription: string;
-  serviceDetails: string;
-  faqs: string[];
-}
+import { NavBar } from "@/components/layout/navbar"; // Import NavBar
+import { SiteFooter } from "@/components/layout/site-footer"; // Import SiteFooter
 
-const ServiceBox = ({
-  title,
-  shortDescription,
-  serviceDetails,
-  faqs,
-}: ServiceBoxProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+function ServiceBox({ id, title, icon }) {
+  const router = useRouter();
 
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
+  const goToServicePage = () => {
+    router.push(`/services/${id}`); // Redirect to the sub-page
+  };
 
   return (
-    <div className="w-full p-2">
-      {/* Service box that triggers the modal */}
+    <div
+      className="flex flex-col items-center justify-center space-y-4 rounded-lg bg-black p-6 shadow-md transition-transform hover:scale-105 hover:shadow-lg"
+      style={{
+        backgroundColor: "#181A20",
+        border: "2px solid #FCD535",
+        borderRadius: "12px",
+      }}
+    >
       <div
-        className="relative h-64 cursor-pointer overflow-hidden rounded-xl border bg-[#181A20] p-8 text-white transition-all hover:scale-105 hover:shadow-xl"
-        onClick={openModal}
+        className="flex h-20 w-20 items-center justify-center rounded-full"
+        style={{
+          backgroundColor: "#FCD535",
+        }}
       >
-        {/* Title at the top */}
-        <h3 className="absolute left-1/2 top-4 -translate-x-1/2 transform text-center text-2xl font-bold text-[#FCD535]">
-          {title}
-        </h3>
-
-        {/* Centered content */}
-        <div className="flex h-full flex-col items-center justify-center text-center">
-          <p className="text-lg text-gray-300">{shortDescription}</p>
-        </div>
+        <img
+          src={icon}
+          alt={title}
+          className="h-16 w-16 object-contain"
+          style={{
+            borderRadius: "8px",
+          }}
+        />
       </div>
-
-      {/* Modal */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#181A20] bg-opacity-80"
-          onClick={closeModal}
-        >
-          <div
-            className="relative w-full max-w-lg scale-90 transform rounded-lg bg-white p-6 opacity-100 transition-all duration-300 ease-out"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="absolute right-2 top-2 text-xl text-gray-500 hover:text-gray-800"
-              onClick={closeModal}
-            >
-              &times;
-            </button>
-            <h3 className="text-2xl font-bold text-[#FCD535]">{title}</h3>
-            <p className="mt-2 text-lg text-[#181A20]">{serviceDetails}</p>
-
-            <div className="mt-4">
-              <h4 className="text-xl font-semibold text-[#FCD535]">FAQs:</h4>
-              <ul className="list-disc pl-6">
-                {faqs.map((faq, index) => (
-                  <li key={index} className="text-lg text-[#181A20]">
-                    {faq}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mt-6 text-center">
-              <button className="transform rounded-lg bg-[#FCD535] px-6 py-2 text-[#181A20] transition-all duration-300 ease-in-out hover:scale-110 hover:bg-[#ffcc00]">
-                Reach Us
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <h3 className="text-center text-lg font-bold text-white">{title}</h3>
+      <button
+        onClick={goToServicePage}
+        className="rounded border border-yellow-400 px-4 py-2 text-sm font-medium text-white transition hover:bg-yellow-400 hover:text-black"
+      >
+        Read More
+      </button>
     </div>
   );
-};
+}
 
-// BentoGrid component that contains multiple service boxes
-export default function BentoGrid() {
+export default function ServiceGrid() {
+  const [activeFilter, setActiveFilter] = useState("All");
+
   const services = [
     {
-      title: "Service 1",
-      shortDescription: "Short description of Service 1.",
-      serviceDetails: "Detailed information about Service 1.",
-      faqs: ["FAQ 1", "FAQ 2", "FAQ 3"],
+      id: "graphic-design",
+      title: "Graphic Design",
+      category: "Graphic Design",
+      icon: "/icons/graphic-design.png",
     },
     {
-      title: "Service 2",
-      shortDescription: "Short description of Service 2.",
-      serviceDetails: "Detailed information about Service 2.",
-      faqs: ["FAQ 1", "FAQ 2", "FAQ 3"],
+      id: "ui-ux",
+      title: "UI/UX Designing",
+      category: "UI/UX",
+      icon: "/icons/ui-ux.png",
     },
     {
-      title: "Service 3",
-      shortDescription: "Short description of Service 3.",
-      serviceDetails: "Detailed information about Service 3.",
-      faqs: ["FAQ 1", "FAQ 2", "FAQ 3"],
+      id: "web-development",
+      title: "Web Development",
+      category: "Web Development",
+      icon: "/icons/web-development.png",
     },
     {
-      title: "Service 4",
-      shortDescription: "Short description of Service 4.",
-      serviceDetails: "Detailed information about Service 4.",
-      faqs: ["FAQ 1", "FAQ 2", "FAQ 3"],
+      id: "shopify",
+      title: "Shopify",
+      category: "Shopify",
+      icon: "/icons/shopify.png",
     },
     {
-      title: "Service 5",
-      shortDescription: "Short description of Service 5.",
-      serviceDetails: "Detailed information about Service 5.",
-      faqs: ["FAQ 1", "FAQ 2", "FAQ 3"],
+      id: "digital-marketing",
+      title: "Digital Marketing",
+      category: "Digital Marketing",
+      icon: "/icons/digital-marketing.png",
     },
     {
-      title: "Service 6",
-      shortDescription: "Short description of Service 6.",
-      serviceDetails: "Detailed information about Service 6.",
-      faqs: ["FAQ 1", "FAQ 2", "FAQ 3"],
+      id: "ai-integration",
+      title: "AI Integration",
+      category: "AI Integration",
+      icon: "/icons/ai-integration.png",
     },
   ];
 
+  const filters = [
+    "All",
+    "UI/UX",
+    "Web Design",
+    "Graphic Design",
+    "Web Development",
+    "Shopify",
+  ];
+
+  const filteredServices =
+    activeFilter === "All"
+      ? services
+      : services.filter((service) => service.category === activeFilter);
+
   return (
-    <div className="container mx-auto py-12">
-      <h2 className="mb-8 text-center text-4xl font-extrabold text-[#FCD535]">
-        Our Services
-      </h2>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
-        {services.map((service, index) => (
-          <ServiceBox key={index} {...service} />
-        ))}
+    <>
+      <div className="container mx-auto py-12">
+        <h2 className="mb-6 text-center text-2xl font-semibold text-white">
+          Solutions Designed For Your Digital Evolution
+        </h2>
+
+        <div className="mb-8 flex flex-wrap justify-center space-x-3">
+          {filters.map((filter, index) => (
+            <button
+              key={index}
+              className={`rounded-full px-6 py-2 text-sm font-medium transition ${
+                activeFilter === filter
+                  ? "bg-yellow-400 text-black"
+                  : "border border-yellow-400 bg-black text-white hover:bg-yellow-400 hover:text-black"
+              }`}
+              onClick={() => setActiveFilter(filter)}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredServices.map((service, index) => (
+            <ServiceBox key={index} {...service} />
+          ))}
+        </div>
+
+        <div className="mt-8 flex justify-center">
+          <button className="rounded bg-yellow-400 px-6 py-3 text-sm font-medium text-black transition hover:bg-yellow-500">
+            Load More
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

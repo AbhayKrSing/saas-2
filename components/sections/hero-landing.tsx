@@ -1,4 +1,5 @@
 import Link from "next/link";
+import logo from "public/logo.png";
 
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -6,11 +7,14 @@ import { buttonVariants } from "@/components/ui/button";
 
 export default function HeroLanding() {
   return (
-    <section className="py-20 text-white">
+    <section
+      className="flex h-screen items-center justify-center py-20 text-white"
+      style={{ paddingTop: "80px", paddingBottom: "80px" }}
+    >
       <div className="container flex flex-col items-center space-y-8 text-center">
         {/* Tagline */}
         <h1 className="text-[64px] font-bold leading-[72px] tracking-tight">
-          Welcome to <span className="text-[#FCD535]">BrandName</span>
+          Welcome to <span className="text-[#FCD535]">Yellow Agency</span>
         </h1>
 
         {/* Subheading */}
