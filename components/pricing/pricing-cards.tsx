@@ -3,7 +3,7 @@
 import { useContext, useState } from "react";
 import Link from "next/link";
 import { UserSubscriptionPlan } from "@/types";
-
+import { prisma } from "@/lib/db";
 import { SubscriptionPlan } from "@/types/index";
 import { pricingData } from "@/config/subscriptions";
 import { cn } from "@/lib/utils";
@@ -31,6 +31,32 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
   const toggleBilling = () => {
     setIsYearly(!isYearly);
   };
+
+   const sendEmail=async()=>{
+    const USER=await  prisma.user.findFirst({  //finding user
+      where:{
+        id:userId
+      }
+     })
+     const email=USER?.email;
+     const res= await fetch("api/addSubscription",{
+      method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+        },
+        body:JSON.stringify({email})
+     })
+
+     const data=await res.json();
+     if(!data.error){
+      console.log(data.error);
+      return
+     }
+
+     console.log(data.error);
+     //Now go to mailchimp add automatic mail system on new signup(Since it is not free i have not done it)
+
+  }
 
   const PricingCard = ({ offer }: { offer: SubscriptionPlan }) => {
     return (
@@ -126,7 +152,7 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
                   : "outline"
               }
               rounded="full"
-              onClick={() => setShowSignInModal(true)}
+              onClick={() => {setShowSignInModal(true),sendEmail()}}
             >
               Sign in
             </Button>
